@@ -23,6 +23,6 @@ sum(basetable["variable"]==value)
 #### Date Preparation
 ```python
 ## Define the variables
-X = basetable[["predictor_1","predictor_2","predictor_3"]]`
+X = basetable[["predictor_1","predictor_2","predictor_3"]]
 y = basetable[["target"]]
 ```
