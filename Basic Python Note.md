@@ -1,12 +1,11 @@
 *This is a note for Python code that is widely used for data preparation and understanding between model building, I am consistently update the file throughout the whole learning process and practice.*  
 
-*Latest update date:* ***2020-01-14***
+*Latest update date:* ***2020-01-15***
 ***
 
-#### Packages that are useful for predictive modeling
+#### Packages 
 ```python
 import pandas as pd
-from sklearn import linear_model
 ```
 
 #### Load Dataset — Data Understanding
@@ -18,6 +17,12 @@ population_size = len(basetable)
 targets = sum(basetable["Target"])
 ## count the number of occurrences of a certain value in a column
 sum(basetable["variable"]==value)
+## return the top or bottom row
+df.head(1)
+df.tail(1)
+
+## sort the dataset using specific column, default by asc
+df_sorted=df.sort(['target'])
 ```
 
 #### Date Preparation
