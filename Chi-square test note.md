@@ -24,3 +24,23 @@ from sklearn.feature_selection import chi2
 ## 1st array-chi square values. the scores are better if greater. 
 ## 2nd array- p-value
 chi_scores = chi2(X,y)
+
+*Another package that is userful for choosing the k best features using chi-square test
+```python
+from sklearn.feature_selection import SelectKBest
+
+## calculate the top 3 features with the highest score
+selector= SelectKBest(score_func= f_classif, k= 3)
+
+## get scores and p-values for all the features
+selector.fit(X, y)
+Pvalues= selector.pvalues_
+Scores= selector.scores_
+
+## get those selected features' corresponding column number in X dataframe
+GetSupport= selector.get_support(True)
+## scores of those selected features
+TransX= selector.transform(X)
+
+
+```
