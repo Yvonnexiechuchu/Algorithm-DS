@@ -24,7 +24,7 @@ from sklearn.feature_selection import chi2
 ## 1st array-chi square values. the scores are better if greater. 
 ## 2nd array- p-value
 chi_scores = chi2(X,y)
-
+```
 *Another package that is userful for choosing the k best features using chi-square test
 ```python
 from sklearn.feature_selection import SelectKBest
