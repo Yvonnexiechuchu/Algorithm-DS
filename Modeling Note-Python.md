@@ -5,9 +5,10 @@
 ## Variable Selection
 *with many variables, model tend to be: 1) Overfitting 2) Hard to maintain or implement 3)Hard to inteprete, multi-collinearity*
 ### Forward stepwise 
-```python
+Python's statsmodels doesn't have a built-in method for choosing a linear model by forward selection. 
+I am trying to write one based on adjusted R-squared by adding features one at a time.
+This part will be posted soon.
 
-```
 ### CHI SQUARE
 <https://github.com/Yvonnexiechuchu/Algorithm-DS/blob/master/Chi-square%20test%20note.md>
 
@@ -66,7 +67,42 @@ logreg.intercept_
 predictions = logreg.predict(new_data)
 predictions_probability = logreg.predict_proba(new_data)
 ```
+
 ### Random Forest
+Reference<https://towardsdatascience.com/random-forest-in-python-24d0893d51c0>
+For classification and Regression task, using different part from sklearn
+Each tree in the forest is trained on a random subset of the data points with replacement (called bagging, short for bootstrap aggregating).
+#### Regression
+```python
+## Regression
+from sklearn.ensemble import RandomForestRegressor
+## Instantiate model with 1000 decision trees
+rf = RandomForestRegressor(n_estimators = 1000, random_state = 42)
+
+rf.fit(train_features, train_targets)
+## predict on the test data
+predictions = rf.predict(test_features)
+```
+#### Classification
+```python
+from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier()
+clf.fit(features_train,label_train)
+```
+
+get the importance of each variable/feature in the RF model
+- we could use the random forest feature importances as a kind of feature selection method.
+```python
+## Get numerical feature importances
+importances = list(rf.feature_importances_)
+# List of tuples with variable and importance
+feature_importances = [(feature, round(importance, 2)) for feature, importance in zip(feature_list, importances)]
+# Sort the feature importances by most important first
+feature_importances = sorted(feature_importances, key = lambda x: x[1], reverse = True)
+# Print out the feature and importances 
+[print('Variable: {:20} Importance: {}'.format(*pair)) for pair in feature_importances];
+```
+
 
 ## MODEL EVALUATION
 ### AUC-ROC CURVE,  checking any classification model’s performance
@@ -78,3 +114,4 @@ auc=roc_auc_score(true_y,predictions_proba_y)
 ##calculates the AUC of model that is built on a train set and evaluated on a test set:
 auc_train, auc_test = auc_train_test(variables, target, train, test)
 ```
+
