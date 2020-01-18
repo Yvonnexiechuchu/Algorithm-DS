@@ -1,6 +1,6 @@
 *This is a note for Python code that divided by different ML model. The note can be used as a cheat sheet during daily coding. I am consistently update the file throughout the whole learning process and practice.*  
 
-*Latest update date:* ***2020-01-15***
+*Latest update date:* ***2020-01-18***
 ***
 ## Variable Selection
 *with many variables, model tend to be: 1) Overfitting 2) Hard to maintain or implement 3)Hard to inteprete, multi-collinearity*
@@ -36,6 +36,11 @@ df_selected=df[final_vars]
 
 ## Partition the data in a train and test set.
 ```python
+## data preparation
+from sklearn import linear_model
+X = basetable[["predictor_1","predictor_2","predictor_3"]]`
+y = basetable[["target"]]
+
 from sklearn.cross_validation import train_test_split
 ## Carry out 80-20 partititioning with stratification
 X_train, X_test, y_train, y_test = train_test_split (X, y, test_size = 0.8, stratify = y)
@@ -45,12 +50,22 @@ test = pd.concat([X_test, y_test], axis=1)
 ```
 
 ## MODEL
+### Linear Regression  
+```python
+from sklearn.linear_model import LinearRegression
+linreg = LinearRegression()
+
+linreg.fit(X_train, y_train)
+
+feature_cols = ["predictor_1","predictor_2","predictor_3"]
+# pair the feature names with the coefficients
+# hard to remember the order, we so use python's zip function to pair the feature names with the coefficients
+zip(feature_cols, linreg.coef_)
+
+```
 ### Logistic Regression
 ```python
-## data preparation
-from sklearn import linear_model
-X = basetable[["predictor_1","predictor_2","predictor_3"]]`
-y = basetable[["target"]]
+
 ## Create a logistic regression model logreg and fit it to the data.
 logreg = linear_model.LogisticRegression()
 logreg.fit(X, y)
@@ -66,8 +81,21 @@ logreg.intercept_
 ## Make a prediction for each observation in new_data and assign it to predictions
 predictions = logreg.predict(new_data)
 predictions_probability = logreg.predict_proba(new_data)
+
 ```
 
+### SVM Support Vector Machine
+Can be used to solve both classification and regression problems, but I mainly focused on classification first
+```python
+from sklearn import svm
+## We set a SVM classifier, the default SVM Classifier (Kernel = Radial Basis Function)
+classifier = svm.SVC(kernel='linear')
+classifier.fit(X_train, y_train)
+
+prediction = classifier.predict(X_test)
+## using a confusion matrix to show the result
+cm = confusion_matrix(y_test, prediction)
+```
 ### Random Forest
 Reference<https://towardsdatascience.com/random-forest-in-python-24d0893d51c0>
 For classification and Regression task, using different part from sklearn
@@ -90,7 +118,8 @@ clf = RandomForestClassifier()
 clf.fit(features_train,label_train)
 ```
 
-get the importance of each variable/feature in the RF model
+get the importance of each variable/feature in the RF model  
+
 - we could use the random forest feature importances as a kind of feature selection method.
 ```python
 ## Get numerical feature importances
@@ -104,9 +133,14 @@ feature_importances = sorted(feature_importances, key = lambda x: x[1], reverse 
 ```
 
 
-## MODEL EVALUATION
+## MODEL EVALUATION  
+**MAE** is the easiest to understand, because it's the average error.  
+**MSE** is more popular than MAE, because MSE "punishes" larger errors.  
+**RMSE** is even more popular than MSE, because RMSE is interpretable in the "y" units. Easier to put in context as it's the same units as our response variable
+
+FOR MODEL EVALUATION IN CLASSIFICATION MODEL: <https://www.ritchieng.com/machine-learning-evaluate-classification-model/#>  
 ### AUC-ROC CURVE,  checking any classification model’s performance
-<https://towardsdatascience.com/understanding-auc-roc-curve-68b2303cc9c5>
+<https://towardsdatascience.com/understanding-auc-roc-curve-68b2303cc9c5>  
 ROC is a probability curve and AUC represents degree or measure of separability. 
 ```python
 from sklearn.metrics import roc_auc_score
